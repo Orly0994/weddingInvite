@@ -13,8 +13,16 @@ body {
   min-height: 100vh;
 }
 
+.content {
+  padding: 15px;
+}
+
 .d-flex {
   display: flex;
+}
+
+.d-inline-block {
+  display: inline-block;
 }
 
 .align-items-center {
@@ -23,4 +31,36 @@ body {
 
 .justify-content-center {
   justify-content: center;
+}
+
+.mr-2 {
+  margin-right: 2rem;
+}
+
+.mr-xs-0 {
+  @media screen and (max-width: 480px) {
+    margin-right: 0rem;
+  }
+}
+
+.mr-xs-1 {
+  @media screen and (max-width: 480px) {
+    margin-right: 1rem;
+  }
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mb-4 {
+  margin-bottom: 4rem;
+}
+
+.width-for-2-digits {
+  width: 40px;
 }

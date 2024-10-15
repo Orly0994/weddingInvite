@@ -1,6 +1,6 @@
 <template>
   <div class="section hello-screen">
-    <div>
+    <div class="image-wrapper">
       <img class="image-1" src="../images/1.png" alt="1">
     </div>
     <div class="names">
@@ -11,11 +11,11 @@
     </div>
     <div class="date">{{ dateFormated }}</div>
     <VueCountdown class="countdown" :time="timeRemaining" v-slot="{ days, hours, minutes, seconds }">
-      <div class="d-flex align-items-center justify-content-center">
-        <div v-if="days">{{ days }} дн.</div>
-        <div v-if="hours">{{ hours }} ч.</div>
-        <div v-if="minutes">{{ minutes }} мин.</div>
-        <div v-if="seconds">{{ seconds }} сек.</div>
+      <div class="countdown-wrapper">
+        <div><span class="d-inline-block">{{ days }}</span> дн.</div>
+        <div><span class="d-inline-block">{{ hours }}</span> ч.</div>
+        <div><span class="d-inline-block">{{ minutes }}</span> мин.</div>
+        <div><span class="d-inline-block">{{ seconds }}</span> сек.</div>
       </div>
     </VueCountdown>
   </div>
@@ -67,10 +67,35 @@ const isLastName = (index: number) => {
   font-size: 20px;
 }
 
+.image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+
 .countdown {
+  display: block;
+  width: 100%;
   margin-top: auto;
   text-wrap: nowrap;
+  overflow: hidden;
   font-size: 30px;
   margin-bottom: 1rem;
+  padding: 0 15px;
+
+  &-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+
+    div {
+      flex: 0 1 88px;
+      text-align: center;
+    }
+  }
 }
 </style>
