@@ -1,7 +1,7 @@
 <template>
   <div class="section hello-screen">
     <div class="image-wrapper">
-      <img class="image-1" src="../images/1.png" alt="1">
+      <img class="image-1" src="../images/1.png" alt="1" />
     </div>
     <div class="names">
       <template v-for="(name, i) in names" :key="name">
@@ -9,13 +9,27 @@
         <div v-if="!isLastName(i)" class="fs-20">И</div>
       </template>
     </div>
-    <div class="date">{{ dateFormated }}</div>
-    <VueCountdown class="countdown" :time="timeRemaining" v-slot="{ days, hours, minutes, seconds }">
+
+    <div class="date text-bold">{{ dateFormated }}</div>
+
+    <VueCountdown
+      class="countdown"
+      :time="timeRemaining"
+      v-slot="{ days, hours, minutes, seconds }"
+    >
       <div class="countdown-wrapper">
-        <div><span class="d-inline-block">{{ days }}</span> дн.</div>
-        <div><span class="d-inline-block">{{ hours }}</span> ч.</div>
-        <div><span class="d-inline-block">{{ minutes }}</span> мин.</div>
-        <div><span class="d-inline-block">{{ seconds }}</span> сек.</div>
+        <div>
+          <span class="d-inline-block text-bold">{{ days }}</span> дн.
+        </div>
+        <div>
+          <span class="d-inline-block text-bold">{{ hours }}</span> ч.
+        </div>
+        <div>
+          <span class="d-inline-block text-bold">{{ minutes }}</span> мин.
+        </div>
+        <div>
+          <span class="d-inline-block text-bold">{{ seconds }}</span> сек.
+        </div>
       </div>
     </VueCountdown>
   </div>
@@ -29,10 +43,10 @@ const names: Ref<string[]> = ref(['Анастасия', 'Андрей'])
 
 const date = new Date('12-04-2024')
 const dateFormated = format(date, 'dd.MM.yyyy')
-const timeRemaining = date.getTime() - new Date().getTime() 
+const timeRemaining = date.getTime() - new Date().getTime()
 
 const isLastName = (index: number) => {
-  return index === names.value.length -1
+  return index === names.value.length - 1
 }
 </script>
 
@@ -54,12 +68,12 @@ const isLastName = (index: number) => {
 }
 
 .name {
-  font-size: 48px;
+  font-size: 53px;
   line-height: 4rem;
 }
 
 .date {
-  font-size: 25px;
+  font-size: 30px;
   margin-top: auto;
 }
 

@@ -2,67 +2,75 @@
   <div class="section-map">
     <div class="addresses">
       <div class="address">
-        <img class="address__img" src="/src/images/timing.svg" alt="palace">
+        <img class="address__img" src="/src/images/timing.svg" alt="palace" />
 
         <div class="address__name">Дворец бракосочетания</div>
 
         <div class="address__copy" @click="onClickCopyAddressPalaceBtn">
-          <img src="/src/images/copy.svg" alt="">
+          <img src="/src/images/copy.svg" alt="" />
         </div>
       </div>
 
       <div class="address">
-        <img class="address__img" src="/src/images/martini.svg" alt="palace">
+        <img class="address__img" src="/src/images/martini.svg" alt="palace" />
 
         <div class="address__name">Ресторан "Весенний"</div>
 
         <div class="address__copy" @click="onClickCopyAddressRestaurantBtn">
-          <img src="/src/images/copy.svg" alt="">
+          <img src="/src/images/copy.svg" alt="" />
         </div>
       </div>
     </div>
     <div class="map-wrapper">
-      <div id="map" style="width: 100%; height: 100%;"></div>
+      <div id="map" style="width: 100%; height: 100%"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useToast, POSITION } from "vue-toastification"
+import { useToast } from 'vue-toastification'
 import { onMounted } from 'vue'
 
 const toast = useToast()
 
 const init = () => {
   ymaps.ready(() => {
-    const map = new ymaps.Map("map", {
+    const map = new ymaps.Map('map', {
       center: [59.934014, 30.293828],
       controls: [],
-      zoom: 14
-    });
-
-    const palace = new ymaps.Placemark([59.934014, 30.293828], {
-        balloonContent: 'Дворец бракосочетания № 1'
-    }, {
-        iconLayout: 'default#image',
-        // Своё изображение иконки метки.
-        iconImageHref: '/src/images/timing.svg',
-        // Размеры метки.
-        iconImageSize: [60, 60],
+      zoom: 13,
     })
 
-    const banket = new ymaps.Placemark([59.920118, 30.284796], {
-        balloonContent: 'Ресторан "Весенний"'
-    }, {
+    const palace = new ymaps.Placemark(
+      [59.934014, 30.293828],
+      {
+        balloonContent: 'Дворец бракосочетания № 1',
+      },
+      {
         iconLayout: 'default#image',
         // Своё изображение иконки метки.
-        iconImageHref: '/src/images/martini.svg',
+        iconImageHref: '/src/images/timing-map.svg',
         // Размеры метки.
         iconImageSize: [60, 60],
-    })
+      },
+    )
+
+    const banket = new ymaps.Placemark(
+      [59.920118, 30.284796],
+      {
+        balloonContent: 'Ресторан "Весенний"',
+      },
+      {
+        iconLayout: 'default#image',
+        // Своё изображение иконки метки.
+        iconImageHref: '/src/images/martini-map.svg',
+        // Размеры метки.
+        iconImageSize: [60, 60],
+      },
+    )
 
     map.geoObjects.add(palace).add(banket)
-  });
+  })
 }
 
 const showToastCopied = () => {
@@ -101,6 +109,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   flex-direction: column;
+  background-color: var(--background-color-black);
+  color: var(--text-color-white);
 }
 
 .map-wrapper {
@@ -109,11 +119,11 @@ onMounted(() => {
 }
 
 #map {
-	filter: grayscale(1);
-	-ms-filter: grayscale(1);
-	-webkit-filter: grayscale(1);
-	-moz-filter: grayscale(1);
-	-o-filter: grayscale(1);
+  filter: grayscale(1);
+  -ms-filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+  -moz-filter: grayscale(1);
+  -o-filter: grayscale(1);
 }
 
 .addresses {
@@ -131,6 +141,7 @@ onMounted(() => {
   margin-bottom: 2rem;
   font-size: 30px;
   gap: 30px;
+  width: 100%;
 
   &__img {
     width: 40px;
@@ -139,6 +150,8 @@ onMounted(() => {
 
   &__name {
     margin-bottom: -19px;
+    font-weight: bold;
+    flex: 1;
   }
 
   &__copy {

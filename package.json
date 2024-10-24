@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "prettier": "prettier . --write",
     "preview": "vite preview"
   },
   "keywords": [

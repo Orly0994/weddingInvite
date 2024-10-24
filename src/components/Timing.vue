@@ -5,11 +5,11 @@
     <template v-for="(event, index) in timing" :key="event.time">
       <div class="timing-element">
         <div class="timing-element__img">
-          <img src="../images/timing.svg" alt="timing-icon">
+          <img src="../images/timing-map.svg" alt="timing-icon" />
         </div>
 
         <div class="timing-element__text">
-          <div>
+          <div class="text-bold">
             {{ event.time }}
           </div>
 
