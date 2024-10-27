@@ -21,6 +21,7 @@
         </div>
       </div>
     </div>
+
     <div class="map-wrapper">
       <div id="map" style="width: 100%; height: 100%"></div>
     </div>
@@ -30,6 +31,8 @@
 <script setup lang="ts">
 import { useToast } from 'vue-toastification'
 import { onMounted } from 'vue'
+import iconTimingMap from '/src/images/timing-map.svg'
+import iconMartiniMap from '/src/images/martini-map.svg'
 
 const toast = useToast()
 
@@ -49,7 +52,7 @@ const init = () => {
       {
         iconLayout: 'default#image',
         // Своё изображение иконки метки.
-        iconImageHref: '/src/images/timing-map.svg',
+        iconImageHref: iconTimingMap,
         // Размеры метки.
         iconImageSize: [60, 60],
       },
@@ -63,7 +66,7 @@ const init = () => {
       {
         iconLayout: 'default#image',
         // Своё изображение иконки метки.
-        iconImageHref: '/src/images/martini-map.svg',
+        iconImageHref: iconMartiniMap,
         // Размеры метки.
         iconImageSize: [60, 60],
       },

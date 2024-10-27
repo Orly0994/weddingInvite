@@ -10,6 +10,8 @@ export default defineConfig({
   },
 
   build: {
+    outDir: 'server/public',
+    emptyOutDir: true,
     sourcemap: true,
     target: 'es2015',
     minify: true,

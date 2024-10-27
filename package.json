@@ -18,6 +18,8 @@
   "dependencies": {
     "@chenfengyuan/vue-countdown": "2",
     "date-fns": "^4.1.0",
+    "express": "^4.21.1",
+    "mongoose": "^8.7.3",
     "vue": "^3.5.11",
     "vue-toastification": "^2.0.0-rc.5"
   },

@@ -5,7 +5,7 @@
     <div class="list-wrapper">
       <div class="list">
         <label v-for="drink in drinks" :key="drink.id" class="list__item mb-2">
-          <input type="checkbox" @change="drink.isChecked = !drink.isChecked ">
+          <input type="checkbox" :checked="drink.isChecked" @input="(event) => onChangeDrink(drink.id, event)">
 
           <div class="checkbox"></div>
 
@@ -20,7 +20,7 @@
       </div>
 
       <div class="btn-wrapper">
-        <button class="btn" @click="onClickBtn">Отправить</button>
+        <button class="btn" @click="onClickBtn" :disabled="isLoading">Отправить</button>
       </div>
 
     </div>
@@ -28,24 +28,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useToast } from 'vue-toastification'
+import { useFetch } from '../shared/useFetch'
+
+const props = defineProps(['guest'])
 
 const toast = useToast()
+const request = useFetch()
+
+const isLoading = ref(false)
 
 const drinks = ref([
   {
-    id: 2,
+    id: 1,
     name: 'Красное вино',
     isChecked: false,
   },
   {
-    id: 3,
+    id: 2,
     name: 'Белое вино',
     isChecked: false,
   },
   {
-    id: 33,
+    id: 3,
     name: 'Игристое',
     isChecked: false,
   },
@@ -73,10 +79,58 @@ const drinks = ref([
 
 const comment = ref('')
 
-const onClickBtn = () => {
-  console.log(comment, drinks)
-  toast('Шпасибо!')
+const syncDataWithProps = () => {
+  if (props.guest.comment) {
+    comment.value = props.guest.comment
+  }
+
+  if (props.guest.drinks) {
+    console.log(drinks.value)
+    drinks.value.forEach(drink => {
+      const drinkFound = props.guest.drinks.find(dr => drink.id === dr.id)
+
+      if (drinkFound) {
+        drink.isChecked = drinkFound.isChecked
+      }
+    })
+  }
 }
+
+const onChangeDrink = (id, event) => {
+  const drink = drinks.value.find(drinks => drinks.id === id)
+
+  if (drink) {
+    drink.isChecked = event.target.checked
+  }
+}
+
+const onClickBtn = async () => {
+  isLoading.value = true
+
+  try {
+    const guestId = props.guest.id
+
+    await request.put(guestId, {
+      ...props.guest,
+      drinks: drinks.value.map(drink => {
+        if (drink.isChecked) {
+          return drink
+        }
+
+        return null
+      }).filter(Boolean),
+      comment: comment.value,
+    })
+  } finally {
+    isLoading.value = false
+
+    toast('Спасибо!')
+  }
+}
+
+watchEffect(() => {
+  syncDataWithProps()
+})
 </script>
 
 <style lang="scss">
@@ -188,6 +242,11 @@ input[type="checkbox"] {
     justify-content: center;
     width: 100%;
     margin-top: 4rem;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.2;
   }
 }
 </style>

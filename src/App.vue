@@ -4,7 +4,7 @@
     <GuestText class="mb-4" />
     <Timing />
     <Colors />
-    <Form />
+    <Form :guest="guest" />
     <Map />
   </div>
 </template>
@@ -16,4 +16,30 @@ import Timing from './components/Timing.vue'
 import Colors from './components/Colors.vue'
 import Map from './components/Map.vue'
 import Form from './components/Form.vue'
+
+import { ref } from 'vue'
+import { useFetch } from './shared/useFetch'
+
+const isLoading = ref(false)
+const request = useFetch()
+const guest = ref({})
+
+const init = async () => {
+  isLoading.value = true
+
+  try {
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get('id')
+
+    if (id) {
+      const response = await request.get(id)
+
+      guest.value = response
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
+init()
 </script>
