@@ -88,8 +88,10 @@ const onClickCopyAddressRestaurantBtn = async () => {
   try {
     await navigator.clipboard.writeText('просп. Римского-Корсакова, 83-85')
     showToastCopied()
-  } catch {
+  } catch(error) {
     showToastError()
+
+    throw error
   }
 }
 
@@ -97,8 +99,10 @@ const onClickCopyAddressPalaceBtn = async () => {
   try {
     await navigator.clipboard.writeText('Английская наб., 28, Санкт-Петербург')
     showToastCopied()
-  } catch {
+  } catch(error) {
     showToastError()
+
+    throw error
   }
 }
 
