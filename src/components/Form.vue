@@ -1,34 +1,73 @@
 <template>
   <div class="section-form mb-2">
-    <h1 class="mb-2 text-center">Предпочтения по напиткам</h1>
+    <div class="text-guest mb-2">
+      Просим вас ответить на несколько вопросов до 15 ноября.<br />
+      Это поможет нам в организации торжества.
+    </div>
+
+    <h2>Сможете ли вы присутствовать?</h2>
 
     <div class="list-wrapper">
       <div class="list">
-        <label v-for="drink in drinks" :key="drink.id" class="list__item mb-2">
-          <input type="checkbox" :checked="drink.isChecked" @input="(event) => onChangeDrink(drink.id, event)">
+        <label v-for="presenceOption in presenceOptions" :key="presenceOption.id" class="list__item mb-2">
+          <input type="radio" name="presence" :value="presenceOption.id" @input="onInputPresence" />
 
           <div class="checkbox"></div>
 
-          {{ drink.name }}
+          {{ presenceOption.name }}
         </label>
       </div>
+    </div>
 
-      <div class="label">Другое:</div>
+    <div :class="{ disabled: isDisabled }">
+      <h2 class="text-center">Предпочтения по напиткам:</h2>
 
-      <div class="input-wrapper">
-        <input type="text" v-model="comment" class="input">
+      <div class="list-wrapper mb-4">
+        <div class="list">
+          <label v-for="drink in drinks" :key="drink.id" class="list__item mb-2" :disabled="isDisabled">
+            <input type="checkbox" :checked="drink.isChecked" @input="(event) => onChangeDrink(drink.id, event)">
+
+            <div class="checkbox"></div>
+
+            {{ drink.name }}
+          </label>
+        </div>
+
+        <div class="label">Другое:</div>
+
+        <div class="input-wrapper">
+          <input type="text" v-model="comment" class="input" :disabled="isDisabled">
+        </div>
       </div>
 
-      <div class="btn-wrapper">
-        <button class="btn" @click="onClickBtn" :disabled="isLoading">Отправить</button>
-      </div>
+      <h2 class="text-center">Предпочтения по горячему:</h2>
 
+      <div class="list-wrapper">
+        <div class="list">
+          <label v-for="foodOption in foodOptions" :key="foodOption.id" class="list__item mb-2" :disabled="isDisabled">
+            <input type="radio" name="food" :value="foodOption.id" @input="onInputFood" />
+
+            <div class="checkbox"></div>
+
+            {{ foodOption.name }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-wrapper mb-4">
+      <button class="btn" @click="onClickBtn" :disabled="isLoading">Отправить</button>
+    </div>
+
+    <div class="text-guest">
+      Просим не обременять себя выбором цветов, Ваше присутствие скрасит этот день ярче любых букетов! <br />
+      Будем Вас ждать ♥
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useFetch } from '../shared/useFetch'
 
@@ -38,6 +77,32 @@ const toast = useToast()
 const request = useFetch()
 
 const isLoading = ref(false)
+
+const presenceOptions = [
+  {
+    id: 1,
+    name: 'Смогу'
+  },
+  {
+    id: 2,
+    name: 'Не смогу'
+  },
+]
+
+const foodOptions = [
+  {
+    id: 1,
+    name: 'Мясо'
+  },
+  {
+    id: 2,
+    name: 'Рыба'
+  },
+]
+
+const food = ref(null)
+
+const presence = ref(null)
 
 const drinks = ref([
   {
@@ -79,19 +144,21 @@ const drinks = ref([
 
 const comment = ref('')
 
+const isDisabled = computed(() => {
+  return Number(presence.value) === 2
+})
+
 const syncDataWithProps = () => {
   if (props.guest.comment) {
     comment.value = props.guest.comment
   }
 
+
   if (props.guest.drinks) {
-    console.log(drinks.value)
     drinks.value.forEach(drink => {
       const drinkFound = props.guest.drinks.find(dr => drink.id === dr.id)
 
-      if (drinkFound) {
-        drink.isChecked = drinkFound.isChecked
-      }
+      drink.isChecked = drinkFound ?? false
     })
   }
 }
@@ -104,22 +171,34 @@ const onChangeDrink = (id, event) => {
   }
 }
 
+const onInputPresence = (event) => {
+  presence.value = event.target.value
+}
+
+const onInputFood = (event) => {
+  food.value = event.target.value
+}
+
 const onClickBtn = async () => {
   isLoading.value = true
 
   try {
-    const guestId = props.guest.id
+    const guestUuid = props.guest.uuid
 
-    await request.put(guestId, {
+    await request.put(guestUuid, {
       ...props.guest,
       drinks: drinks.value.map(drink => {
         if (drink.isChecked) {
-          return drink
+          return {
+            id: drink.id
+          }
         }
 
         return null
       }).filter(Boolean),
       comment: comment.value,
+      presence: presence.value,
+      food: food.value,
     })
   } finally {
     isLoading.value = false
@@ -131,6 +210,8 @@ const onClickBtn = async () => {
 watchEffect(() => {
   syncDataWithProps()
 })
+
+syncDataWithProps()
 </script>
 
 <style lang="scss">
@@ -144,10 +225,12 @@ watchEffect(() => {
 
 .list-wrapper {
   max-width: 400px;
+  width: 100%;
 }
 
 .list {
   padding: 30px 0;
+  width: 100%;
 
   &__item {
     display: flex;
@@ -157,6 +240,10 @@ watchEffect(() => {
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;
+
+    &[disabled="true"] {
+      pointer-events: none;
+    }
   }
 }
 
@@ -182,7 +269,7 @@ watchEffect(() => {
   }
 }
 
-input[type="checkbox"] {
+input[type="checkbox"], input[type="radio"] {
   display: none;
 
   &:checked ~ .checkbox {
@@ -202,7 +289,7 @@ input[type="checkbox"] {
   font-size: 30px;
   font-weight: bold;
   font-family: 'Sacramento';
-  padding: 0 0 20px 0;
+  padding: 0 0 3px 0;
 
   &:focus {
     outline: none;
@@ -214,6 +301,10 @@ input[type="checkbox"] {
     margin-top: auto;
     padding: 20px 0;
     height: 70px;
+  }
+
+  &[disabled="true"] {
+    pointer-events: none;
   }
 }
 
@@ -241,12 +332,16 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-top: 4rem;
   }
 
   &[disabled] {
     pointer-events: none;
     opacity: 0.2;
   }
+}
+
+.disabled {
+  opacity: .3;
+  pointer-events: none;
 }
 </style>

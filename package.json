@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "prettier": "prettier . --write",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:server": "nodemon ./server/server.js"
   },
   "keywords": [
     "wedding",
@@ -20,11 +21,14 @@
     "date-fns": "^4.1.0",
     "express": "^4.21.1",
     "mongoose": "^8.7.3",
+    "uuid": "^11.0.2",
     "vue": "^3.5.11",
     "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7",
     "prettier": "3.3.3",
     "sass": "^1.79.5",
     "typescript": "^5.6.2",

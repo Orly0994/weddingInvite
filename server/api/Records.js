@@ -1,35 +1,42 @@
 const express = require('express')
 const router = express.Router()
-
-const records = require('../models/Records')
+const Record = require('../models/Record')
+const { v4: uuidv4 } = require('uuid')
 
 router.get('/', async (req, res) => {
-   res.json(records.records)
+  res.json(await Record.find())
 });
 
 router.post('/', async (req, res) => {
-  records.addRecord(req.body)
+  const payload = {
+    ...req.body,
+    uuid: uuidv4(),
+    hasAnswered: false,
+    timeAnswered: '',
+  }
+
+  const record = new Record(payload)
+  await record.save()
   
-  res.json({state: 'success'})
+  res.json({ state: 'success' })
 })
 
-router.get('/:id', async (req, res) => {
-  res.json(records.findById(Number(req.params.id)))
+router.get('/:uuid', async (req, res) => {
+  res.json(await Record.findOne({ uuid: req.params.uuid }))
 })
 
-router.put('/:id', async (req, res) => {
-  records.setRecord(Number(req.params.id), req.body)
+router.put('/:uuid', async (req, res) => {
+  await Record.findOneAndUpdate({
+    uuid: req.params.uuid
+  }, req.body)
+
   res.json({state: 'updated'})
 })
 
 router.delete('/:id', async (req, res) => {
-  const response = records.deleteRecord(Number(req.params.id))
+  await Record.findByIdAndRemove(req.params.id)
 
-  if (response) {
-    res.json({state: 'deleted'})
-  } else {
-    res.json({state: 'not deleted'})
-  }
+  res.json({state: 'deleted'})
 })
 
 module.exports = router

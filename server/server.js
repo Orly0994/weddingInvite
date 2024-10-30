@@ -5,7 +5,11 @@ const initRecords = require('./createRecords')
 
 const app = express()
 
-app.set('port', 80)
+app.set('port', 5049)
+
+mongoose.connect('mongodb://localhost:27017/guests')
+   .then(db => console.log('База данных подключена OK'))
+   .catch(err => console.error(err))
 
 app.use('/', express.static(path.join(__dirname, '/public/')))
 app.use(express.json())
@@ -16,5 +20,5 @@ app.use('/api/records', require('./api/Records'))
 initRecords()
 
 app.listen(app.get('port'), () => {
-  console.log(`server working on ${app.get('port')}`)
+  console.log(`Сервер запущен на порте:${app.get('port')}`)
 })

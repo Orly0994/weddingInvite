@@ -12,9 +12,9 @@ export const useFetch = () => {
       return fetch(`${url}/${id}`, parameters).then(data => data.json())
     },
 
-    put(id, body) {
-      console.log(id, body)
-      return fetch(`${url}/${id}`, {
+    put(uuid, body) {
+      console.log(uuid, body)
+      return fetch(`${url}/${uuid}`, {
         ...parameters,
         method: 'PUT',
         body: JSON.stringify(body)

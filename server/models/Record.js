@@ -1,36 +1,15 @@
-let idCounter = 1
+const mongoose = require('mongoose')
+const { Schema } = mongoose
 
-const Record = class {
-  id = null
-  name = ''
-  drinks = [
-    {
-      id: 4,
-      name: 'Коньяк',
-      isChecked: true,
-    },
-    {
-      id: 5,
-      name: 'Виски',
-      isChecked: true,
-    },
-  ]
-  presence = null
-  comment = 'Какой то коммент'
+const Record = new Schema({
+   name: String,
+   gender: String,
+   drinks: Array,
+   comment: String,
+   presence: Boolean,
+   uuid: String,
+   hasAnswered: Boolean,
+   timeAnswered: String,
+})
 
-  constructor(name) {
-    this.name = name
-    this.id = idCounter
-    idCounter++
-  }
-
-  setDrinks(drinks) {
-    this.drinks = drinks
-  }
-
-  setPresence(presence) {
-    this.presence = presence
-  }
-}
-
-module.exports = Record
+module.exports = mongoose.model('Record', Record)

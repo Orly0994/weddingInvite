@@ -47,7 +47,7 @@ const init = () => {
     const palace = new ymaps.Placemark(
       [59.934014, 30.293828],
       {
-        balloonContent: 'Дворец бракосочетания № 1',
+        balloonContent: 'Дворец бракосочетания № 1\n Английская наб., 28',
       },
       {
         iconLayout: 'default#image',
@@ -61,7 +61,7 @@ const init = () => {
     const banket = new ymaps.Placemark(
       [59.920118, 30.284796],
       {
-        balloonContent: 'Ресторан "Весенний"',
+        balloonContent: 'Ресторан "Весенний"\n просп. Римского-Корсакова, 83-85',
       },
       {
         iconLayout: 'default#image',

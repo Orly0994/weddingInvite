@@ -1,6 +1,6 @@
 <template>
   <div class="timing mb-4">
-    <h1 class="mb-2">Timing</h1>
+    <h1 class="mb-2">Программа</h1>
 
     <template v-for="(event, index) in timing" :key="event.time">
       <div class="timing-element">
@@ -27,27 +27,32 @@
 <script setup lang="ts">
 const timing = [
   {
+    time: '14:30',
+    name: 'Сбор гостей в ЗАГСе',
+  },
+  
+  {
     time: '15:00',
     name: 'Церемония бракосочетания',
   },
 
   {
-    time: '15:30',
-    name: 'Сбор в ресторане',
-  },
-
-  {
     time: '16:00',
-    name: 'Начало банкета',
+    name: 'Welcome в ресторане',
   },
 
   {
-    time: '20:00',
+    time: '16:30',
+    name: 'Банкет',
+  },
+
+  {
+    time: '20:30',
     name: 'Тортик :)',
   },
 
   {
-    time: '21:30',
+    time: '22:00',
     name: 'Завершение вечера',
   },
 ]

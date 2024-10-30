@@ -1,9 +1,8 @@
 <template>
   <div class="content text-guest-wrapper">
     <div class="text-guest">
-      {{ words.dear }} {{ guestName }} приглашаем {{ words.you[0] }} на нашу
-      свадьбу.<br />
-      Будем рады с {{ words.you[1] }} разделить этот день.
+      {{ words.dear }} {{ guestName }}! <br />
+      Мы будем рады разделить с {{ words.you[1] }} радость неповторимого для нас дня - дня нашей свадьбы.
     </div>
   </div>
 </template>
@@ -41,6 +40,8 @@ const words = computed(() => {
 .text-guest {
   text-align: center;
   font-size: 38px;
+  max-width: 1024px;
+  margin: 0 auto;
 
   &-wrapper {
     color: var(--text-color-white);
