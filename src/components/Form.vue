@@ -10,7 +10,7 @@
     <div class="list-wrapper">
       <div class="list">
         <label v-for="presenceOption in presenceOptions" :key="presenceOption.id" class="list__item">
-          <input type="radio" name="presence" :value="presenceOption.id" @input="onInputPresence" />
+          <input type="radio" name="presence" :value="presenceOption.value" :checked="isCheckedPresenceOption(presenceOption)" @input="onInputPresence" />
 
           <div class="checkbox"></div>
 
@@ -67,9 +67,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, computed } from 'vue'
+import { ref, watchEffect, computed, Ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useFetch } from '../shared/useFetch'
+import { isNil } from 'lodash'
 
 import { useWords } from '../shared/useWords'
 
@@ -85,11 +86,13 @@ const isLoading = ref(false)
 const presenceOptions = [
   {
     id: 1,
-    name: 'Смогу'
+    name: 'Смогу',
+    value: true,
   },
   {
     id: 2,
-    name: 'Не смогу'
+    name: 'Не смогу',
+    value: false,
   },
 ]
 
@@ -106,7 +109,7 @@ const foodOptions = [
 
 const food = ref(null)
 
-const presence = ref(null)
+const presence: Ref<null|boolean> = ref(null)
 
 const drinks = ref([
   {
@@ -149,7 +152,7 @@ const drinks = ref([
 const comment = ref('')
 
 const canBe = computed(() => {
-  return Number(presence.value) === 1
+  return presence.value === true
 })
 
 const syncDataWithProps = () => {
@@ -157,6 +160,13 @@ const syncDataWithProps = () => {
     comment.value = props.guest.comment
   }
 
+  if (props.guest?.food) {
+    food.value = props.guest.food
+  }
+
+  if (!isNil(props.guest?.presence)) {
+    presence.value = props.guest.presence
+  }
 
   if (props.guest?.drinks) {
     drinks.value.forEach(drink => {
@@ -176,7 +186,7 @@ const onChangeDrink = (id, event) => {
 }
 
 const onInputPresence = (event) => {
-  presence.value = event.target.value
+  presence.value = event.target.value === 'true' ? true : false
 }
 
 const onInputFood = (event) => {
@@ -211,7 +221,7 @@ const onClickBtn = async () => {
       food: food.value,
     })
 
-    if (!canBe) {
+    if (!canBe.value) {
       toast('Очень жаль :(')
     } else {
       toast('Спасибо!')
@@ -219,6 +229,10 @@ const onClickBtn = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const isCheckedPresenceOption = (option) => {
+  return presence.value === option.value
 }
 
 watchEffect(() => {

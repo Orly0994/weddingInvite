@@ -1,6 +1,7 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="!isLoading">
     <HelloScreen />
+    {{ guest }}
     <GuestText :guest="guest" class="mb-4" />
     <Timing />
     <Colors :guest="guest" />
