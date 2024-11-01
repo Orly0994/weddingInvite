@@ -84,10 +84,21 @@ const isLastElement = (index: number) => {
     flex: 0 1 50%;
     display: flex;
     justify-content: flex-end;
+    @media (max-width: 768px) {
+      flex: 0;
+    }
   }
 
   &__text {
     flex: 0 1 50%;
+    @media (max-width: 768px) {
+      flex: 1;
+      font-size: 27px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 27px;
   }
 }
 
@@ -110,6 +121,10 @@ const isLastElement = (index: number) => {
     width: var(--divider-width);
     border-radius: 50%;
     background: var(--divider-color);
+
+    @media (max-width: 768px) {
+      left: 45px;
+    }
   }
 }
 </style>

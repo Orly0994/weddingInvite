@@ -4,7 +4,7 @@
       <h1>Dress code</h1>
 
       <div class="text-guest mb-2">
-        Мы будем очень благодарны, если вы поддержите стиль и цвет нашей свадьбы.
+        Мы будем очень благодарны, если {{ words.you[2] }} {{ words.support }} стиль и цвет нашей свадьбы.
       </div>
 
       <div class="colors mb-2">
@@ -16,7 +16,7 @@
         ></div>
       </div>
 
-      <div class="text-guest">
+      <div class="text-guest" v-if="props.guest?.gender !== 'she'">
         Молодым людям допускается черный низ и белый верх
       </div>
     </div>
@@ -24,6 +24,11 @@
 </template>
 
 <script setup lang="ts">
+import { useWords } from '../shared/useWords'
+
+const props = defineProps(['guest'])
+const words = useWords(props.guest?.gender)
+
 const colors = ['#000000', '#777777']
 
 const getShadow = (hex: string) => {

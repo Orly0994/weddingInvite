@@ -8,32 +8,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { useWords } from '../shared/useWords'
 
-const sexes = ['she', 'he', 'they']
+const props = defineProps(['guest'])
 
-const wordsMap = {
-  dear: {
-    [sexes[0]]: 'Дорогая',
-    [sexes[1]]: 'Дорогой',
-    [sexes[2]]: 'Дорогие',
-  },
-  you: {
-    [sexes[0]]: ['тебя', 'тобой'],
-    [sexes[1]]: ['тебя', 'тобой'],
-    [sexes[2]]: ['вас', 'вами'],
-  },
-}
+const words = useWords(props.guest?.gender)
 
-const guestName = ref('Гость')
-const sex = ref(sexes[2])
-
-const words = computed(() => {
-  return {
-    dear: wordsMap.dear[sex.value],
-    you: wordsMap.you[sex.value],
-  }
-})
+const guestName = props.guest?.name ?? 'Гость'
 </script>
 
 <style lang="scss">
@@ -46,6 +27,10 @@ const words = computed(() => {
   &-wrapper {
     color: var(--text-color-white);
     background-color: var(--background-color-black);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 30px;
   }
 }
 </style>

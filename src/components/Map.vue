@@ -4,20 +4,18 @@
       <div class="address">
         <img class="address__img" src="/src/images/timing.svg" alt="palace" />
 
-        <div class="address__name">Дворец бракосочетания</div>
-
-        <div class="address__copy" @click="onClickCopyAddressPalaceBtn">
-          <img src="/src/images/copy.svg" alt="" />
+        <div class="address__name">
+          <div>Дворец бракосочетания</div>
+          <div class="fs-20">просп. Римского-Корсакова, 83-85</div>
         </div>
       </div>
 
       <div class="address">
         <img class="address__img" src="/src/images/martini.svg" alt="palace" />
 
-        <div class="address__name">Ресторан "Весенний"</div>
-
-        <div class="address__copy" @click="onClickCopyAddressRestaurantBtn">
-          <img src="/src/images/copy.svg" alt="" />
+        <div class="address__name">
+          <div>Ресторан "Весенний"</div>
+          <div class="fs-20">Английская наб., 28</div>
         </div>
       </div>
     </div>
@@ -29,19 +27,16 @@
 </template>
 
 <script setup lang="ts">
-import { useToast } from 'vue-toastification'
 import { onMounted } from 'vue'
 import iconTimingMap from '/src/images/timing-map.svg'
 import iconMartiniMap from '/src/images/martini-map.svg'
 
-const toast = useToast()
-
 const init = () => {
   ymaps.ready(() => {
     const map = new ymaps.Map('map', {
-      center: [59.934014, 30.293828],
+      center: [59.925979, 30.293102],
       controls: [],
-      zoom: 13,
+      zoom: 14,
     })
 
     const palace = new ymaps.Placemark(
@@ -74,36 +69,6 @@ const init = () => {
 
     map.geoObjects.add(palace).add(banket)
   })
-}
-
-const showToastCopied = () => {
-  toast('Адрес скопирован!')
-}
-
-const showToastError = () => {
-  toast('Что-то пошло не так...')
-}
-
-const onClickCopyAddressRestaurantBtn = async () => {
-  try {
-    await navigator.clipboard.writeText('просп. Римского-Корсакова, 83-85')
-    showToastCopied()
-  } catch(error) {
-    showToastError()
-
-    throw error
-  }
-}
-
-const onClickCopyAddressPalaceBtn = async () => {
-  try {
-    await navigator.clipboard.writeText('Английская наб., 28, Санкт-Петербург')
-    showToastCopied()
-  } catch(error) {
-    showToastError()
-
-    throw error
-  }
 }
 
 onMounted(() => {
@@ -167,6 +132,10 @@ onMounted(() => {
     justify-content: center;
     margin-bottom: -9px;
     cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 27px;
   }
 }
 

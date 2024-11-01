@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
     <HelloScreen />
-    <GuestText class="mb-4" />
+    <GuestText :guest="guest" class="mb-4" />
     <Timing />
-    <Colors />
+    <Colors :guest="guest" />
     <Form :guest="guest" />
     <Map />
   </div>
@@ -17,12 +17,22 @@ import Colors from './components/Colors.vue'
 import Map from './components/Map.vue'
 import Form from './components/Form.vue'
 
-import { ref } from 'vue'
+import { ref, Ref } from 'vue';
 import { useFetch } from './shared/useFetch'
+
+interface IGuest {
+  name: string,
+  gender: string,
+  drinks: Object[],
+  comment: string,
+  presence: boolean,
+  uuid: string,
+  hasAnswered: boolean,
+}
 
 const isLoading = ref(false)
 const request = useFetch()
-const guest = ref({})
+const guest: Ref<IGuest|null> = ref(null)
 
 const init = async () => {
   isLoading.value = true
@@ -32,7 +42,7 @@ const init = async () => {
     const id = params.get('uuid')
 
     if (id) {
-      const response = await request.get(id)
+      const response: IGuest = await request.get(id)
 
       guest.value = response
     }
