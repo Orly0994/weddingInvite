@@ -39,9 +39,6 @@ import AOS from 'aos'
 
 import { ref, Ref, computed, onMounted } from 'vue'
 import { useFetch } from '../shared/useFetch'
-import { router } from '../router'
-
-console.log(router)
 
 interface IGuest {
   name: string

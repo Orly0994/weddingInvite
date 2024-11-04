@@ -115,8 +115,6 @@ import { useWords } from '../shared/useWords'
 
 const props = defineProps(['guest'])
 
-console.log(props.guest)
-
 const toast = useToast()
 const request = useFetch()
 const words = useWords(props.guest?.gender)
