@@ -1,99 +1,101 @@
 <template>
-  <div class="section-form mb-2">
-    <div class="text-guest mb-2" data-aos="fade-up">
-      Просим {{ words.you[0] }} ответить на несколько вопросов до 15 ноября.<br />
-      Это поможет нам в организации торжества.
-    </div>
-
-    <h2 class="text-center" data-aos="fade-up">
-      {{ words.can }} ли {{ words.you[2] }} присутствовать?
-    </h2>
-
-    <div class="list-wrapper" data-aos="fade-up">
-      <div class="list">
-        <label
-          v-for="presenceOption in presenceOptions"
-          :key="presenceOption.id"
-          class="list__item"
-        >
-          <input
-            type="radio"
-            name="presence"
-            :value="presenceOption.value"
-            :checked="isCheckedPresenceOption(presenceOption)"
-            @input="onInputPresence"
-          />
-
-          <div class="checkbox"></div>
-
-          {{ presenceOption.name }}
-        </label>
+  <div class="section-form">
+    <template v-if="isRenderedForm">
+      <div class="text-guest mb-2" data-aos="fade-up">
+        Просим {{ words.you[0] }} ответить на несколько вопросов до 15 ноября.<br />
+        Это поможет нам в организации торжества.
       </div>
-    </div>
 
-    <template v-if="canBe">
-      <h2 class="text-center" data-aos="fade-up">Предпочтения по горячему:</h2>
+      <h2 class="text-center" data-aos="fade-up">
+        {{ words.can }} ли {{ words.you[2] }} присутствовать?
+      </h2>
 
       <div class="list-wrapper" data-aos="fade-up">
         <div class="list">
           <label
-            v-for="foodOption in foodOptions"
-            :key="foodOption.id"
+            v-for="presenceOption in presenceOptions"
+            :key="presenceOption.id"
             class="list__item"
           >
             <input
-              type="checkbox"
-              name="food"
-              :value="foodOption.id"
-              :checked="isCheckedFoodOption(foodOption)"
-              @input="onInputFood"
+              type="radio"
+              name="presence"
+              :value="presenceOption.value"
+              :checked="isCheckedPresenceOption(presenceOption)"
+              @input="onInputPresence"
             />
 
             <div class="checkbox"></div>
 
-            {{ foodOption.name }}
+            {{ presenceOption.name }}
           </label>
         </div>
       </div>
 
-      <h2 class="text-center" data-aos="fade-up">Предпочтения по напиткам:</h2>
+      <template v-if="canBe">
+        <h2 class="text-center" data-aos="fade-up">Предпочтения по горячему:</h2>
 
-      <div class="list-wrapper mb-4" data-aos="fade-up">
-        <div class="list">
-          <label v-for="drink in drinks" :key="drink.id" class="list__item">
-            <input
-              type="checkbox"
-              :checked="drink.isChecked"
-              @input="(event) => onChangeDrink(drink.id, event)"
-            />
+        <div class="list-wrapper" data-aos="fade-up">
+          <div class="list">
+            <label
+              v-for="foodOption in foodOptions"
+              :key="foodOption.id"
+              class="list__item"
+            >
+              <input
+                type="checkbox"
+                name="food"
+                :value="foodOption.id"
+                :checked="isCheckedFoodOption(foodOption)"
+                @input="onInputFood"
+              />
 
-            <div class="checkbox"></div>
+              <div class="checkbox"></div>
 
-            {{ drink.name }}
-          </label>
+              {{ foodOption.name }}
+            </label>
+          </div>
         </div>
 
-        <div class="label" data-aos="fade-up">Другое:</div>
+        <h2 class="text-center" data-aos="fade-up">Предпочтения по напиткам:</h2>
 
-        <div class="input-wrapper" data-aos="fade-up">
-          <input type="text" v-model="comment" class="input" />
+        <div class="list-wrapper mb-4" data-aos="fade-up">
+          <div class="list">
+            <label v-for="drink in drinks" :key="drink.id" class="list__item">
+              <input
+                type="checkbox"
+                :checked="drink.isChecked"
+                @input="(event) => onChangeDrink(drink.id, event)"
+              />
+
+              <div class="checkbox"></div>
+
+              {{ drink.name }}
+            </label>
+          </div>
+
+          <div class="label" data-aos="fade-up">Другое:</div>
+
+          <div class="input-wrapper" data-aos="fade-up">
+            <input type="text" v-model="comment" class="input" />
+          </div>
         </div>
+      </template>
+
+      <div class="btn-wrapper mb-4" data-aos="fade-up">
+        <button class="btn" @click="onClickBtn" :disabled="isLoading">
+          <img
+            class="btn-loader"
+            :class="{ visible: isLoading }"
+            src="../images/btn-loader.svg"
+            alt="loader"
+          />
+          <span class="btn-text" :class="{ visible: !isLoading }">{{
+            btnLabel
+          }}</span>
+        </button>
       </div>
     </template>
-
-    <div class="btn-wrapper mb-4" data-aos="fade-up">
-      <button class="btn" @click="onClickBtn" :disabled="isLoading">
-        <img
-          class="btn-loader"
-          :class="{ visible: isLoading }"
-          src="../images/btn-loader.svg"
-          alt="loader"
-        />
-        <span class="btn-text" :class="{ visible: !isLoading }">{{
-          btnLabel
-        }}</span>
-      </button>
-    </div>
 
     <div class="text-guest" data-aos="fade-up">
       Просим не обременять себя выбором цветов, {{ words.you[3] }} присутствие
@@ -113,11 +115,14 @@ import { useWords } from '../shared/useWords'
 
 const props = defineProps(['guest'])
 
+console.log(props.guest)
+
 const toast = useToast()
 const request = useFetch()
 const words = useWords(props.guest?.gender)
 
 const isLoading = ref(false)
+const isRenderedForm = computed(() => props.guest !== null)
 
 const presenceOptions = [
   {
