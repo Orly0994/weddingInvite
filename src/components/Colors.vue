@@ -8,7 +8,7 @@
         {{ words.support }} стиль и цвет нашей свадьбы.
       </div>
 
-      <div class="colors mb-2" data-aos="fade-right">
+      <div class="colors mb-2" data-aos="zoom-in-out">
         <div
           v-for="color in colors"
           :key="color"

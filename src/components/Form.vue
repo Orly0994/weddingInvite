@@ -266,7 +266,7 @@ const onClickBtn = async () => {
   try {
     const guestUuid = props.guest?.uuid
 
-    const response = await request.put(guestUuid, {
+    await request.put(guestUuid, {
       ...props.guest,
       drinks: drinks.value
         .map((drink) => {
@@ -284,7 +284,7 @@ const onClickBtn = async () => {
       food: food.value.map((i) => ({ id: i.id })),
     })
 
-    hasAnswered.value = response.hasAnswered
+    hasAnswered.value = true
 
     if (!canBe.value) {
       toast('Очень жаль :(')

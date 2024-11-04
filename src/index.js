@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { router } from './router'
+// import { router } from './router'
 import App from './App.vue'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
@@ -10,7 +10,7 @@ import Vue3Lottie from 'vue3-lottie'
 
 const app = createApp(App)
 
-app.use(router)
+// app.use(router)
 
 app.component('VueCountdown', VueCountdown)
 

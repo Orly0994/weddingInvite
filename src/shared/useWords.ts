@@ -23,7 +23,7 @@ const wordsMap: Object = {
   they: {
     dear: 'Дорогие',
     you: ['Вас', 'Вами', 'Вы', 'Ваше'],
-    support: 'поддержишь',
+    support: 'поддержите',
     can: 'Сможете',
   },
 }
