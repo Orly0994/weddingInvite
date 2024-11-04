@@ -2,18 +2,28 @@
   <div class="section-map">
     <div class="addresses">
       <div class="address">
-        <img class="address__img" src="/src/images/timing.svg" alt="palace" />
+        <img
+          class="address__img"
+          src="/src/images/timing.svg"
+          alt="palace"
+          data-aos="fade-right"
+        />
 
-        <div class="address__name">
+        <div class="address__name" data-aos="fade-left">
           <div>Дворец бракосочетания</div>
           <div class="fs-20">просп. Римского-Корсакова, 83-85</div>
         </div>
       </div>
 
       <div class="address">
-        <img class="address__img" src="/src/images/martini.svg" alt="palace" />
+        <img
+          class="address__img"
+          src="/src/images/martini.svg"
+          alt="palace"
+          data-aos="fade-right"
+        />
 
-        <div class="address__name">
+        <div class="address__name" data-aos="fade-left">
           <div>Ресторан "Весенний"</div>
           <div class="fs-20">Английская наб., 28</div>
         </div>
@@ -41,9 +51,7 @@ const init = () => {
 
     const palace = new ymaps.Placemark(
       [59.934014, 30.293828],
-      {
-        balloonContent: 'Дворец бракосочетания № 1\n Английская наб., 28',
-      },
+      {},
       {
         iconLayout: 'default#image',
         // Своё изображение иконки метки.
@@ -55,9 +63,7 @@ const init = () => {
 
     const banket = new ymaps.Placemark(
       [59.920118, 30.284796],
-      {
-        balloonContent: 'Ресторан "Весенний"\n просп. Римского-Корсакова, 83-85',
-      },
+      {},
       {
         iconLayout: 'default#image',
         // Своё изображение иконки метки.

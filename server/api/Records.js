@@ -5,19 +5,23 @@ const { v4: uuidv4 } = require('uuid')
 
 router.get('/', async (req, res) => {
   res.json(await Record.find())
-});
+})
 
 router.post('/', async (req, res) => {
   const payload = {
     ...req.body,
     uuid: uuidv4(),
+    presence: null,
+    food: [],
+    drinks: [],
+    comment: '',
     hasAnswered: false,
     timeAnswered: '',
   }
 
   const record = new Record(payload)
   await record.save()
-  
+
   res.json({ state: 'success' })
 })
 
@@ -26,17 +30,27 @@ router.get('/:uuid', async (req, res) => {
 })
 
 router.put('/:uuid', async (req, res) => {
-  await Record.findOneAndUpdate({
-    uuid: req.params.uuid
-  }, req.body)
+  const payload = {
+    ...req.body,
+    hasAnswered: true,
+    timeAnswered: new Date(),
+  }
+  const user = await Record.findOneAndUpdate(
+    {
+      uuid: req.params.uuid,
+    },
+    payload,
+  )
 
-  res.json({state: 'updated'})
+  res.json(user)
 })
 
-router.delete('/:id', async (req, res) => {
-  await Record.findByIdAndRemove(req.params.id)
+router.delete('/:uuid', async (req, res) => {
+  await Record.findOneAndDelete({
+    uuid: req.params.uuid
+  })
 
-  res.json({state: 'deleted'})
+  res.json({ state: 'deleted' })
 })
 
 module.exports = router

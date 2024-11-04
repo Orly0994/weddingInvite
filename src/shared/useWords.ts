@@ -1,10 +1,10 @@
 const sexes = ['he', 'she', 'they']
 
 interface IDictionary {
-  dear: string,
-  you: string[],
-  support: string,
-  can: string,
+  dear: string
+  you: string[]
+  support: string
+  can: string
 }
 
 const wordsMap: Object = {
@@ -12,19 +12,19 @@ const wordsMap: Object = {
     dear: 'Дорогой',
     you: ['Тебя', 'Тобой', 'Ты', 'Твое'],
     support: 'поддержишь',
-    can: 'Сможешь'
+    can: 'Сможешь',
   },
   she: {
     dear: 'Дорогая',
     you: ['Тебя', 'Тобой', 'Ты', 'Твое'],
     support: 'поддержишь',
-    can: 'Сможешь'
+    can: 'Сможешь',
   },
   they: {
     dear: 'Дорогие',
     you: ['Вас', 'Вами', 'Вы', 'Ваше'],
     support: 'поддержишь',
-    can: 'Сможете'
+    can: 'Сможете',
   },
 }
 

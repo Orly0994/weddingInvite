@@ -1,8 +1,9 @@
 <template>
   <div class="content text-guest-wrapper">
-    <div class="text-guest">
+    <div class="text-guest" data-aos="fade-up">
       {{ words.dear }} {{ guestName }}! <br />
-      Мы будем рады разделить с {{ words.you[1] }} радость неповторимого для нас дня - дня нашей свадьбы.
+      Мы будем рады разделить с {{ words.you[1] }} радость неповторимого для нас
+      дня - дня нашей свадьбы.
     </div>
   </div>
 </template>

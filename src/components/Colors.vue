@@ -1,13 +1,14 @@
 <template>
   <div class="section-colors">
-    <div class="container">
+    <div class="container" data-aos="fade-up">
       <h1>Dress code</h1>
 
       <div class="text-guest mb-2">
-        Мы будем очень благодарны, если {{ words.you[2] }} {{ words.support }} стиль и цвет нашей свадьбы.
+        Мы будем очень благодарны, если {{ words.you[2] }}
+        {{ words.support }} стиль и цвет нашей свадьбы.
       </div>
 
-      <div class="colors mb-2">
+      <div class="colors mb-2" data-aos="fade-right">
         <div
           v-for="color in colors"
           :key="color"
@@ -29,7 +30,7 @@ import { useWords } from '../shared/useWords'
 const props = defineProps(['guest'])
 const words = useWords(props.guest?.gender)
 
-const colors = ['#000000', '#777777']
+const colors = ['#000000']
 
 const getShadow = (hex: string) => {
   return `5px 5px 20px ${hex}`

@@ -1,9 +1,9 @@
 <template>
   <div class="timing mb-4">
-    <h1 class="mb-2">Программа</h1>
+    <h1 class="mb-2" data-aos="fade-up">Программа</h1>
 
     <template v-for="(event, index) in timing" :key="event.time">
-      <div class="timing-element">
+      <div class="timing-element" data-aos="fade-up">
         <div class="timing-element__img">
           <img src="../images/timing-map.svg" alt="timing-icon" />
         </div>
@@ -19,7 +19,11 @@
         </div>
       </div>
 
-      <div v-if="!isLastElement(index)" class="divider"></div>
+      <div
+        v-if="!isLastElement(index)"
+        class="divider"
+        data-aos="fade-up"
+      ></div>
     </template>
   </div>
 </template>
@@ -30,7 +34,7 @@ const timing = [
     time: '14:30',
     name: 'Сбор гостей в ЗАГСе',
   },
-  
+
   {
     time: '15:00',
     name: 'Церемония бракосочетания',

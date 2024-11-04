@@ -6,4 +6,11 @@ declare module '*.svg' {
   export default filePath
 }
 
-declare module './shared/useFetch';
+declare module './shared/useFetch'
+declare module './shared/useWords'
+
+// declare module '@vue/runtime-core' {
+//   export interface GlobalComponents {
+//     LottieAnimation: typeof import('vue3-lottie')['Vue3Lottie']
+//   }
+// }

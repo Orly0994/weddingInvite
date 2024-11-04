@@ -46,12 +46,11 @@ const testGuests = [
   },
 ]
 
-
 const initRecords = async () => {
   const records = await Record.find()
-  
+
   if (records.length > 0) {
-    return 
+    return
   }
 
   testGuests.forEach(async (guest) => {

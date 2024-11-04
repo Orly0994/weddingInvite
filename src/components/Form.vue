@@ -1,16 +1,28 @@
 <template>
   <div class="section-form mb-2">
-    <div class="text-guest mb-2">
+    <div class="text-guest mb-2" data-aos="fade-up">
       Просим {{ words.you[0] }} ответить на несколько вопросов до 15 ноября.<br />
       Это поможет нам в организации торжества.
     </div>
 
-    <h2 class="text-center">{{ words.can }} ли {{ words.you[2] }} присутствовать?</h2>
+    <h2 class="text-center" data-aos="fade-up">
+      {{ words.can }} ли {{ words.you[2] }} присутствовать?
+    </h2>
 
-    <div class="list-wrapper">
+    <div class="list-wrapper" data-aos="fade-up">
       <div class="list">
-        <label v-for="presenceOption in presenceOptions" :key="presenceOption.id" class="list__item">
-          <input type="radio" name="presence" :value="presenceOption.value" :checked="isCheckedPresenceOption(presenceOption)" @input="onInputPresence" />
+        <label
+          v-for="presenceOption in presenceOptions"
+          :key="presenceOption.id"
+          class="list__item"
+        >
+          <input
+            type="radio"
+            name="presence"
+            :value="presenceOption.value"
+            :checked="isCheckedPresenceOption(presenceOption)"
+            @input="onInputPresence"
+          />
 
           <div class="checkbox"></div>
 
@@ -20,12 +32,22 @@
     </div>
 
     <template v-if="canBe">
-      <h2 class="text-center">Предпочтения по горячему:</h2>
+      <h2 class="text-center" data-aos="fade-up">Предпочтения по горячему:</h2>
 
-      <div class="list-wrapper">
+      <div class="list-wrapper" data-aos="fade-up">
         <div class="list">
-          <label v-for="foodOption in foodOptions" :key="foodOption.id" class="list__item">
-            <input type="radio" name="food" :value="foodOption.id" @input="onInputFood" />
+          <label
+            v-for="foodOption in foodOptions"
+            :key="foodOption.id"
+            class="list__item"
+          >
+            <input
+              type="checkbox"
+              name="food"
+              :value="foodOption.id"
+              :checked="isCheckedFoodOption(foodOption)"
+              @input="onInputFood"
+            />
 
             <div class="checkbox"></div>
 
@@ -34,12 +56,16 @@
         </div>
       </div>
 
-      <h2 class="text-center">Предпочтения по напиткам:</h2>
+      <h2 class="text-center" data-aos="fade-up">Предпочтения по напиткам:</h2>
 
-      <div class="list-wrapper mb-4">
+      <div class="list-wrapper mb-4" data-aos="fade-up">
         <div class="list">
           <label v-for="drink in drinks" :key="drink.id" class="list__item">
-            <input type="checkbox" :checked="drink.isChecked" @input="(event) => onChangeDrink(drink.id, event)">
+            <input
+              type="checkbox"
+              :checked="drink.isChecked"
+              @input="(event) => onChangeDrink(drink.id, event)"
+            />
 
             <div class="checkbox"></div>
 
@@ -47,20 +73,31 @@
           </label>
         </div>
 
-        <div class="label">Другое:</div>
+        <div class="label" data-aos="fade-up">Другое:</div>
 
-        <div class="input-wrapper">
-          <input type="text" v-model="comment" class="input">
+        <div class="input-wrapper" data-aos="fade-up">
+          <input type="text" v-model="comment" class="input" />
         </div>
       </div>
     </template>
 
-    <div class="btn-wrapper mb-4">
-      <button class="btn" @click="onClickBtn" :disabled="isLoading">Отправить</button>
+    <div class="btn-wrapper mb-4" data-aos="fade-up">
+      <button class="btn" @click="onClickBtn" :disabled="isLoading">
+        <img
+          class="btn-loader"
+          :class="{ visible: isLoading }"
+          src="../images/btn-loader.svg"
+          alt="loader"
+        />
+        <span class="btn-text" :class="{ visible: !isLoading }">{{
+          btnLabel
+        }}</span>
+      </button>
     </div>
 
-    <div class="text-guest">
-      Просим не обременять себя выбором цветов, {{ words.you[3] }} присутствие скрасит этот день ярче любых букетов! <br />
+    <div class="text-guest" data-aos="fade-up">
+      Просим не обременять себя выбором цветов, {{ words.you[3] }} присутствие
+      скрасит этот день ярче любых букетов! <br />
       Будем {{ words.you[0] }} ждать ♥
     </div>
   </div>
@@ -73,7 +110,6 @@ import { useFetch } from '../shared/useFetch'
 import { isNil } from 'lodash'
 
 import { useWords } from '../shared/useWords'
-
 
 const props = defineProps(['guest'])
 
@@ -99,17 +135,19 @@ const presenceOptions = [
 const foodOptions = [
   {
     id: 1,
-    name: 'Мясо'
+    name: 'Мясо',
   },
   {
     id: 2,
-    name: 'Рыба'
+    name: 'Рыба',
   },
 ]
 
-const food = ref(null)
+const food: Ref<any[]> = ref([])
 
-const presence: Ref<null|boolean> = ref(null)
+const presence: Ref<null | boolean> = ref(null)
+
+const hasAnswered: Ref<boolean> = ref(false)
 
 const drinks = ref([
   {
@@ -146,7 +184,7 @@ const drinks = ref([
     id: 7,
     name: 'Безалкольные напитки',
     isChecked: false,
-  }
+  },
 ])
 
 const comment = ref('')
@@ -155,7 +193,15 @@ const canBe = computed(() => {
   return presence.value === true
 })
 
+const btnLabel = computed(() => {
+  return hasAnswered.value ? 'Спасибо за ответ!' : 'Отправить'
+})
+
 const syncDataWithProps = () => {
+  if (props.guest?.hasAnswered) {
+    hasAnswered.value = props.guest.hasAnswered
+  }
+  
   if (props.guest?.comment) {
     comment.value = props.guest.comment
   }
@@ -169,8 +215,8 @@ const syncDataWithProps = () => {
   }
 
   if (props.guest?.drinks) {
-    drinks.value.forEach(drink => {
-      const drinkFound = props.guest.drinks.find(dr => drink.id === dr.id)
+    drinks.value.forEach((drink) => {
+      const drinkFound = props.guest.drinks.find((dr) => drink.id === dr.id)
 
       drink.isChecked = drinkFound ?? false
     })
@@ -178,7 +224,7 @@ const syncDataWithProps = () => {
 }
 
 const onChangeDrink = (id, event) => {
-  const drink = drinks.value.find(drinks => drinks.id === id)
+  const drink = drinks.value.find((drinks) => drinks.id === id)
 
   if (drink) {
     drink.isChecked = event.target.checked
@@ -190,7 +236,19 @@ const onInputPresence = (event) => {
 }
 
 const onInputFood = (event) => {
-  food.value = event.target.value
+  const foodFound = foodOptions.find((f) => {
+    return Number(event.target.value) === f.id
+  })
+
+  if (!!foodFound) {
+    if (event.target.checked) {
+      food.value.push(foodFound)
+    } else {
+      food.value = food.value.filter(
+        (f) => Number(f.id) !== Number(foodFound.id),
+      )
+    }
+  }
 }
 
 const onClickBtn = async () => {
@@ -205,21 +263,25 @@ const onClickBtn = async () => {
   try {
     const guestUuid = props.guest?.uuid
 
-    await request.put(guestUuid, {
+    const response = await request.put(guestUuid, {
       ...props.guest,
-      drinks: drinks.value.map(drink => {
-        if (drink.isChecked) {
-          return {
-            id: drink.id
+      drinks: drinks.value
+        .map((drink) => {
+          if (drink.isChecked) {
+            return {
+              id: drink.id,
+            }
           }
-        }
 
-        return null
-      }).filter(Boolean),
+          return null
+        })
+        .filter(Boolean),
       comment: comment.value,
       presence: presence.value,
-      food: food.value,
+      food: food.value.map((i) => ({ id: i.id })),
     })
+
+    hasAnswered.value = response.hasAnswered
 
     if (!canBe.value) {
       toast('Очень жаль :(')
@@ -233,6 +295,10 @@ const onClickBtn = async () => {
 
 const isCheckedPresenceOption = (option) => {
   return presence.value === option.value
+}
+
+const isCheckedFoodOption = (option) => {
+  return food.value.some(f => f.id === option.id)
 }
 
 watchEffect(() => {
@@ -270,7 +336,7 @@ syncDataWithProps()
     cursor: pointer;
     margin-bottom: 2rem;
 
-    &[disabled="true"] {
+    &[disabled='true'] {
       pointer-events: none;
     }
 
@@ -303,7 +369,8 @@ syncDataWithProps()
   }
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   display: none;
 
   &:checked ~ .checkbox {
@@ -330,14 +397,13 @@ input[type="checkbox"], input[type="radio"] {
     border-bottom: 2px solid var(--checkbox-color);
   }
 
-
   &-wrapper {
     margin-top: auto;
     padding: 20px 0;
     height: 70px;
   }
 
-  &[disabled="true"] {
+  &[disabled='true'] {
     pointer-events: none;
   }
 }
@@ -352,6 +418,7 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 .btn {
+  position: relative;
   min-width: 200px;
   padding: 10px 15px;
   background-color: var(--background-color-toast);
@@ -364,6 +431,35 @@ input[type="checkbox"], input[type="radio"] {
   outline: none;
   cursor: pointer;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-loader {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    animation: 1s linear 0s infinite loop;
+    opacity: 0;
+    transition: 0.3s;
+
+    &.visible {
+      transition-delay: 0.3s;
+      opacity: 1;
+    }
+  }
+
+  &-text {
+    opacity: 0;
+    transition: 0.3s;
+
+    &.visible {
+      transition-delay: 0.3s;
+      opacity: 1;
+    }
+  }
 
   &-wrapper {
     display: flex;
@@ -374,12 +470,21 @@ input[type="checkbox"], input[type="radio"] {
 
   &[disabled] {
     pointer-events: none;
-    opacity: 0.2;
   }
 }
 
 .disabled {
-  opacity: .3;
+  opacity: 0.3;
   pointer-events: none;
+}
+
+@keyframes loop {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
