@@ -18,16 +18,16 @@
       v-slot="{ days, hours, minutes, seconds }"
     >
       <div class="countdown-wrapper">
-        <div>
+        <div class="text-nowrap">
           <span class="d-inline-block text-bold">{{ days }}</span> дн.
         </div>
-        <div>
+        <div class="text-nowrap">
           <span class="d-inline-block text-bold">{{ hours }}</span> ч.
         </div>
-        <div>
+        <div class="text-nowrap">
           <span class="d-inline-block text-bold">{{ minutes }}</span> мин.
         </div>
-        <div>
+        <div class="text-nowrap">
           <span class="d-inline-block text-bold">{{ seconds }}</span> сек.
         </div>
       </div>
