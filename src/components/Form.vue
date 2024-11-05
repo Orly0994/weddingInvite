@@ -112,6 +112,8 @@ import { useFetch } from '../shared/useFetch'
 import { isNil } from 'lodash'
 
 import { useWords } from '../shared/useWords'
+import { useDrinks } from '../shared/useDrinks'
+import { useFoods } from '../shared/useFoods'
 
 const props = defineProps(['guest'])
 
@@ -135,16 +137,7 @@ const presenceOptions = [
   },
 ]
 
-const foodOptions = [
-  {
-    id: 1,
-    name: 'Мясо',
-  },
-  {
-    id: 2,
-    name: 'Рыба',
-  },
-]
+const foodOptions = useFoods()
 
 const food: Ref<any[]> = ref([])
 
@@ -152,43 +145,7 @@ const presence: Ref<null | boolean> = ref(null)
 
 const hasAnswered: Ref<boolean> = ref(false)
 
-const drinks = ref([
-  {
-    id: 1,
-    name: 'Красное вино',
-    isChecked: false,
-  },
-  {
-    id: 2,
-    name: 'Белое вино',
-    isChecked: false,
-  },
-  {
-    id: 3,
-    name: 'Игристое',
-    isChecked: false,
-  },
-  {
-    id: 4,
-    name: 'Коньяк',
-    isChecked: false,
-  },
-  {
-    id: 5,
-    name: 'Виски',
-    isChecked: false,
-  },
-  {
-    id: 6,
-    name: 'Водка',
-    isChecked: false,
-  },
-  {
-    id: 7,
-    name: 'Безалкольные напитки',
-    isChecked: false,
-  },
-])
+const drinks = ref(useDrinks())
 
 const comment = ref('')
 

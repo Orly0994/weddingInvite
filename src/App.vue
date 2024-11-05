@@ -9,8 +9,7 @@
         
         <div class="form-input">
           <div class="form-input__label">Как обращаться?</div>
-          <input v-model="form.gender"/>
-          he, she, they
+          <input v-model="form.gender"/> he, she, they
         </div>
 
         <div class="form-input">
@@ -29,6 +28,7 @@
         <span class="btn-text" :class="{ visible: !isLoadingAdmin }">Создать</span>
       </button>
 
+      <hr class="mb-4" />
 
       <button class="btn mb-4" @click="onClickGetAllBtn" :disabled="isLoadingAdmin">
         <img
@@ -41,12 +41,50 @@
       </button>
 
       <div class="guest-list">
-        <div v-for="guest in guests" :key="guest.uuid" class="guest-list-item">
-          <div class="guest-list-item__name">{{ guest.name }}</div>
+        <div v-for="guest in guests" :key="guest.uuid" class="guest-list-item mb-4">
+          <div class="guest-list-item__row-name">
+            <div class="guest-list-item__name">Имя: {{ guest.name }}</div>
+            <div class="guest-list-item__name">Внутреннее имя: {{ guest.alias }}</div>
+          </div>
+
           <div class="guest-list-item__url">{{ getUrl(guest) }}</div>
-          <button class="btn mb-4" @click="onClickDeleteBtn(guest)" :disabled="isLoading">
+
+          <div class="guest-list-item__row-answer">
+            <div v-if="guest.hasAnswered">Ответил: {{ getDateTime(guest.timeAnswered) }}</div>
+            <div v-else>Пока не ответил</div>
+          </div>
+
+          <div class="guest-list-item__presence">
+            <span v-if="guest.presence" class="green">Будет</span>
+            <span v-else class="red">Не будет</span>
+          </div>
+
+          <div class="guest-list-item__list">
+            Еда:
+            <div class="guest-list-item__list--item" v-for="food in guest.food">
+              {{ getFoodName(food) }}
+            </div>
+          </div>
+
+          <div class="guest-list-item__list">
+            Напитки:
+            <div class="guest-list-item__list--item" v-for="drink in guest.drinks">
+              {{ getDrinkName(drink) }}
+            </div>
+          </div>
+
+          <div class="guest-list-item__comment">
+            Комментарий: {{ guest.comment }}
+          </div>
+
+          <button class="btn" @click="onClickDeleteBtn(guest)" :disabled="isLoading">
             <span class="btn-text" :class="{ visible: !isLoading }">Удалить</span>
           </button>
+
+          <div v-if="isPromtVisible(guest)">
+            <h3>Точно удалить?</h3>
+            <button class="btn" @click="onClickRemoveBtn(guest)">Да</button>
+          </div>
         </div>
       </div>
     </div>
@@ -66,7 +104,7 @@
         :width="400"
         :loop="false"
         :speed="2"
-        @on-complete="onCompleteAdnimation"
+        @on-complete="onCompleteAnimation"
       />
     </div>
 
@@ -96,6 +134,9 @@ import AOS from 'aos'
 
 import { ref, Ref, computed, onMounted } from 'vue'
 import { useFetch } from './shared/useFetch'
+import { getTime } from './shared/getTime'
+import { useFoods } from './shared/useFoods'
+import { useDrinks } from './shared/useDrinks'
 
 interface IGuest {
   name: string
@@ -123,6 +164,11 @@ const animationEnded = ref(false)
 const fadeOutEnded = ref(false)
 const adminModeEnabled = ref(false)
 
+const foods = useFoods()
+const drinks = useDrinks()
+
+const deletePrompts: Ref<any[]> = ref([])
+
 const isShownMainSection = computed(() => {
   return !isLoading.value && animationEnded.value
 })
@@ -144,7 +190,7 @@ const init = async () => {
   }
 }
 
-const onCompleteAdnimation = () => {
+const onCompleteAnimation = () => {
   animationEnded.value = true
 
   setTimeout(() => {
@@ -182,6 +228,16 @@ const onClickCreateBtn = async () => {
 }
 
 const onClickDeleteBtn = async (guest) => {
+  const isPromtActive = deletePrompts.value.some(i => i === guest.uuid)
+
+  if (isPromtActive) {
+    deletePrompts.value = deletePrompts.value.filter(i => i !== guest.uuid)
+  } else {
+    deletePrompts.value.push(guest.uuid)
+  }
+}
+
+const onClickRemoveBtn = async (guest) => {
   isLoading.value = true
 
   try {
@@ -197,8 +253,24 @@ const onClickDeleteBtn = async (guest) => {
   }
 }
 
+const isPromtVisible = (guest) => {
+  return deletePrompts.value.some(i => i === guest.uuid)
+}
+
 const getUrl = (guest) => {
   return `${window.location.origin}/?uuid=${guest.uuid}`
+}
+
+const getDateTime = (date) => {
+  return getTime(date)
+}
+
+const getFoodName = (food) => {
+  return foods.find(f => f.id === food.id).name
+}
+
+const getDrinkName = (drink) => {
+  return drinks.find(d => d.id === drink.id).name
 }
 
 init()
@@ -236,5 +308,59 @@ onMounted(() => {
 
 .fade-out-ended {
   display: none;
+}
+
+hr {
+  border: 1px solid #000;
+}
+
+.guest-list-item {
+  &__row-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 1rem;
+  }
+
+  &__url {
+    margin-bottom: 1rem;
+  }
+
+  &__row-answer {
+    color: #777777;
+    margin-bottom: 1rem;
+  }
+
+  &__presence {
+    margin-bottom: 1rem;
+
+    .green {
+      display: inline-block;
+      padding: 10px 15px;
+      text-align: center;
+      color: white;
+      background-color: green;
+      border-radius: 5px;
+    }
+    
+    .red {
+      display: inline-block;
+      padding: 10px 15px;
+      text-align: center;
+      color: white;
+      background-color: red;
+      border-radius: 5px;
+    }
+  }
+
+  &__list {
+    margin-bottom: 3rem;
+
+    &--item {
+      padding-left: 2rem;
+      margin-bottom: 1rem;
+    }
+  }
 }
 </style>
