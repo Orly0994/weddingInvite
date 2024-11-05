@@ -41,7 +41,7 @@ import { ref, Ref } from 'vue'
 
 const names: Ref<string[]> = ref(['Анастасия', 'Андрей'])
 
-const date = new Date('12-04-2024')
+const date = new Date('2024-12-04T15:00:00')
 const dateFormated = format(date, 'dd.MM.yyyy')
 const timeRemaining = date.getTime() - new Date().getTime()
 
