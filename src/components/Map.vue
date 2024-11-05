@@ -11,7 +11,7 @@
 
         <div class="address__name" data-aos="fade-left">
           <div>Дворец бракосочетания</div>
-          <div class="fs-20">просп. Римского-Корсакова, 83-85</div>
+          <div class="fs-20">Английская наб., 28</div>
         </div>
       </div>
 
@@ -25,7 +25,7 @@
 
         <div class="address__name" data-aos="fade-left">
           <div>Ресторан "Весенний"</div>
-          <div class="fs-20">Английская наб., 28</div>
+          <div class="fs-20">просп. Римского-Корсакова, 83-85</div>
         </div>
       </div>
     </div>
