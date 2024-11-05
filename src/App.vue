@@ -70,10 +70,6 @@
       />
     </div>
 
-    <div style="display: none;" @click="adminModeEnabled = true">
-      click
-    </div>
-
     <div class="wrapper" v-if="isShownMainSection">
       <HelloScreen />
       <GuestText :guest="guest" class="mb-4" />
@@ -81,6 +77,9 @@
       <Colors :guest="guest" />
       <Form :guest="guest" />
       <Map />
+    </div>
+
+    <div style="display: none;" @click="adminModeEnabled = true">
     </div>
   </template>
 </template>
