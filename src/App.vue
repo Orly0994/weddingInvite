@@ -40,7 +40,7 @@
         <span class="btn-text" :class="{ visible: !isLoadingAdmin }">Получить</span>
       </button>
 
-      <div class="guest-list">
+      <div class="guest-list mb-4">
         <div v-for="guest in guests" :key="guest.uuid" class="guest-list-item mb-4">
           <div class="guest-list-item__row-name">
             <div class="guest-list-item__name">Имя: {{ guest.name }}</div>
@@ -86,6 +86,21 @@
             <button class="btn" @click="onClickRemoveBtn(guest)">Да</button>
           </div>
         </div>
+      </div>
+
+      <div>
+        <div>Общее количество гостей: {{ guestsCount }}</div>
+        <div>Количество пристутствующий: {{ guestsCountWillBe }}</div>
+        <div>Количество тех кто не сможет: {{ guestsCountWillNotBe }}</div>
+        <div>Количество не ответивших: {{ guestsCountNotAnswered }}</div>
+        <div>Рыба: {{ guestsCountFish }}</div>
+        <div>Мясо: {{ guestsCountBeef }}</div>
+        <div>Красное вино: {{ guestsCountRedWine }}</div>
+        <div>Белое вино: {{ guestsCountWhiteWine }}</div>
+        <div>Игристое: {{ guestsCountChampagne }}</div>
+        <div>Коньяк: {{ guestsCountCognac }}</div>
+        <div>Виски: {{ guestsCountWhiskey }}</div>
+        <div>Водка: {{ guestsCountVodka }}</div>
       </div>
     </div>
   </div>
@@ -171,6 +186,66 @@ const deletePrompts: Ref<any[]> = ref([])
 
 const isShownMainSection = computed(() => {
   return !isLoading.value && animationEnded.value
+})
+
+const filterGuests = (condition) => {
+  let number = 0
+
+  for (let guest of guests.value) {
+    if (condition(guest)) {
+      number += guest.gender === 'they' ? 2 : 1
+    }
+  }
+
+  return number
+}
+
+const guestsCount = computed(() => {
+  return filterGuests(() => true)
+})
+
+const guestsCountWillBe = computed(() => {
+  return filterGuests((guest) => guest.presence === true)
+})
+
+const guestsCountWillNotBe = computed(() => {
+  return filterGuests((guest) => guest.presence === false)
+})
+
+const guestsCountNotAnswered = computed(() => {
+  return filterGuests((guest) => !guest.hasAnswered)
+})
+
+const guestsCountFish = computed(() => {
+  return filterGuests((guest) => guest.food.some(f => f.id === 2))
+})
+
+const guestsCountBeef = computed(() => {
+  return filterGuests((guest) => guest.food.some(f => f.id === 1))
+})
+
+const guestsCountRedWine = computed(() => {
+  return filterGuests((guest) => guest.drinks.some(d => d.id === 1))
+})
+
+const guestsCountWhiteWine = computed(() => {
+  return filterGuests((guest) => guest.drinks.some(d => d.id === 2))
+})
+
+const guestsCountChampagne = computed(() => {
+  return filterGuests((guest) => guest.drinks.some(d => d.id === 3))
+})
+
+const guestsCountCognac = computed(() => {
+  return filterGuests((guest) => guest.drinks.some(d => d.id === 4))
+})
+
+const guestsCountWhiskey = computed(() => {
+  return filterGuests((guest) => guest.drinks.some(d => d.id === 5))
+})
+
+const guestsCountVodka = computed(() => {
+  return filterGuests((guest) => guest.drinks.some(d => d.id === 6))
 })
 
 const init = async () => {
